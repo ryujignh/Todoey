@@ -12,13 +12,15 @@ class TodoListViewController: UITableViewController {
     
     var itemArray = ["Buy lunch", "Buy egg", "Eat lunch"]
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tableViewTapped))
-        
-//        tableView.addGestureRecognizer(tapGesture)
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
+
         
     }
     
@@ -28,11 +30,6 @@ class TodoListViewController: UITableViewController {
         return itemArray.count
     }
     
-//    @objc func tableViewTapped() {
-//        print("tapped!")
-//    }
-//
-//    
     
     //テーブルにある各Cellのtext値を当ててやる
     //tableViewはSwiftのbuiltin functionなのでoverrideする必用がある。
@@ -70,6 +67,8 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what will happen once the user clicks the Add Item button on our UIAlert
             self.itemArray.append(textField.text!)
+            
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
             
             self.tableView.reloadData()
             
